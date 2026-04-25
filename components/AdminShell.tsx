@@ -1,16 +1,53 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Users, DollarSign, BookOpen, Cpu, Settings, LogOut } from 'lucide-react'
+import {
+  LayoutDashboard, Users, DollarSign, BookOpen, Cpu, Settings, LogOut,
+  Target, Brain, FileText, MessageSquare, GraduationCap, Layers, TrendingUp,
+  CreditCard, Activity,
+} from 'lucide-react'
 import { createBrowserClient } from '@supabase/ssr'
 
-const NAV = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/users', label: 'Users', icon: Users },
-  { href: '/revenue', label: 'Revenue', icon: DollarSign },
-  { href: '/engagement', label: 'Engagement', icon: BookOpen },
-  { href: '/ai-usage', label: 'AI Usage', icon: Cpu },
-  { href: '/content', label: 'Content & Ops', icon: Settings },
+const NAV_GROUPS = [
+  {
+    label: 'Overview',
+    items: [
+      { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { href: '/users', label: 'Users', icon: Users },
+    ],
+  },
+  {
+    label: 'Learning',
+    items: [
+      { href: '/placement', label: 'Placement', icon: Target },
+      { href: '/skills', label: 'Skills', icon: Brain },
+      { href: '/worksheets', label: 'Worksheets', icon: FileText },
+    ],
+  },
+  {
+    label: 'Engagement',
+    items: [
+      { href: '/chat', label: 'Chat', icon: MessageSquare },
+      { href: '/matric', label: 'Matric', icon: GraduationCap },
+      { href: '/modes', label: 'Modes', icon: Layers },
+      { href: '/retention', label: 'Retention', icon: TrendingUp },
+    ],
+  },
+  {
+    label: 'Business',
+    items: [
+      { href: '/revenue', label: 'Revenue', icon: DollarSign },
+      { href: '/monetisation', label: 'Monetisation', icon: CreditCard },
+      { href: '/content', label: 'Content & Ops', icon: Settings },
+    ],
+  },
+  {
+    label: 'Technical',
+    items: [
+      { href: '/ai-usage', label: 'AI Usage', icon: Cpu },
+      { href: '/system', label: 'System Health', icon: Activity },
+    ],
+  },
 ]
 
 const ROLE_COLORS: Record<string, string> = {
@@ -48,19 +85,24 @@ export default function AdminShell({ staff, children }: { staff: Staff; children
             </div>
           </div>
         </div>
-        <nav className="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto">
-          {NAV.map(({ href, label, icon: Icon }) => {
-            const active = pathname === href || pathname.startsWith(href + '/')
-            return (
-              <Link key={href} href={href}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  active ? 'bg-white/25 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
-                }`}>
-                <Icon className="w-4 h-4 flex-shrink-0" />
-                {label}
-              </Link>
-            )
-          })}
+        <nav className="flex-1 px-3 py-3 overflow-y-auto">
+          {NAV_GROUPS.map(group => (
+            <div key={group.label} className="mb-3">
+              <p className="px-3 mb-1 text-[10px] font-semibold text-white/30 uppercase tracking-widest">{group.label}</p>
+              {group.items.map(({ href, label, icon: Icon }) => {
+                const active = pathname === href || pathname.startsWith(href + '/')
+                return (
+                  <Link key={href} href={href}
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      active ? 'bg-white/25 text-white' : 'text-white/70 hover:text-white hover:bg-white/10'
+                    }`}>
+                    <Icon className="w-4 h-4 flex-shrink-0" />
+                    {label}
+                  </Link>
+                )
+              })}
+            </div>
+          ))}
         </nav>
         <div className="px-3 py-3 border-t border-white/20">
           <div className="px-3 py-2 mb-1">
